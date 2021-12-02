@@ -76,11 +76,11 @@
 
     <ImageView
         android:id="@+id/paidLogo"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:elevation="10dp"
-        android:visibility="gone"
         android:src="@drawable/paid_tag"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="@id/emojiCard"
         app:layout_constraintTop_toTopOf="@id/emojiCard" />
 
