@@ -5,8 +5,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.iconfinder.R
+import com.example.iconfinder.base.BaseActivity
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,6 +17,11 @@ class HomeActivity : AppCompatActivity() {
 
     private fun init() {
         setUpFragment()
+        setUpListeners()
+    }
+
+    private fun setUpListeners() {
+
     }
 
     private fun setUpFragment() {

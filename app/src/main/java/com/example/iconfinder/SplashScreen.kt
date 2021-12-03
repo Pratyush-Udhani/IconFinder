@@ -4,11 +4,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import com.example.iconfinder.base.BaseActivity
 import com.example.iconfinder.home.HomeActivity
 import com.example.iconfinder.utils.SPLASH_SCREEN_TIMEOUT
 import kotlinx.android.synthetic.main.activity_splash_screen.*
 
-class SplashScreen : AppCompatActivity() {
+class SplashScreen : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
