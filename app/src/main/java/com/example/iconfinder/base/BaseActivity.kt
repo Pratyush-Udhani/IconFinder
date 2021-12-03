@@ -17,4 +17,7 @@ abstract class BaseActivity: AppCompatActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
 }

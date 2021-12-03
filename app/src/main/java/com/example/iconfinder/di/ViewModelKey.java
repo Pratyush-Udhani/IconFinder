@@ -9,6 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import dagger.MapKey;
+import kotlin.annotation.AnnotationTarget;
+
 
 @MapKey
 @Documented

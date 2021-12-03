@@ -1,5 +1,6 @@
 package com.example.iconfinder.base
 
+import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.example.iconfinder.api.ApiClient
 import com.example.iconfinder.di.ViewModelFactory
@@ -15,5 +16,7 @@ abstract class BaseFragment: Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
 }

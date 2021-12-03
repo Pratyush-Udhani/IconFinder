@@ -1,4 +1,7 @@
 package com.example.iconfinder.home.repo
 
-class IconRepo {
+import com.example.iconfinder.api.ApiClient
+import javax.inject.Inject
+
+class IconRepo @Inject constructor(private val apiClient: ApiClient) {
 }
