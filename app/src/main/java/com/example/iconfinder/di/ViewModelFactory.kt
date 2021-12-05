@@ -2,8 +2,6 @@ package com.example.iconfinder.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import dagger.Provides
-import dagger.hilt.android.scopes.ViewModelScoped
 import javax.inject.Inject
 import javax.inject.Provider
 import javax.inject.Singleton

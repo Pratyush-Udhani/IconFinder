@@ -48,7 +48,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="2"
                     android:fontFamily="@font/lato_regular"
-                    android:text="sadas"
+                    android:text=""
                     android:textSize="12sp"
                     android:ellipsize="end"
                     android:maxLines="1"
@@ -56,8 +56,9 @@
                     android:textColor="@color/black" />
                 <ImageView
                     android:id="@+id/downloadButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:clickable="true"
                     android:src="@drawable/ic_download"/>
                 <TextView
                     android:id="@+id/priceText"
@@ -76,8 +77,8 @@
 
     <ImageView
         android:id="@+id/paidLogo"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:elevation="10dp"
         android:src="@drawable/paid_tag"
         android:visibility="gone"

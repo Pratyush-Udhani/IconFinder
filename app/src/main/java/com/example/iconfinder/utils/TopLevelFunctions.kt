@@ -18,23 +18,23 @@ suspend fun <T> safeApiCall(
                 is HttpException -> {
                     it.printStackTrace()
                     val json = JSONObject(it.response()?.errorBody()?.string())
-                    onFailure.invoke(NetworkResult.Error(json, it.code()))
+                    onFailure.invoke(NetworkResult.Error(json.toString()))
                 }
                 is UnknownHostException -> {
                     val json = JSONObject()
                     json.put("message", "No internet connection")
-                    onFailure.invoke(NetworkResult.Error(json))
+                    onFailure.invoke(NetworkResult.Error(json.toString()))
                 }
                 else -> {
                     val json = JSONObject()
                     json.put("message", "Some error occurred ${it.localizedMessage}")
-                    onFailure.invoke(NetworkResult.Error(json))
+                    onFailure.invoke(NetworkResult.Error(json.toString()))
                 }
             }
         } catch (e: java.lang.Exception) {
             val json = JSONObject()
             json.put("message", "Some error occurred $e")
-            onFailure.invoke(NetworkResult.Error(json))
+            onFailure.invoke(NetworkResult.Error(json.toString()))
         }
     }
 }

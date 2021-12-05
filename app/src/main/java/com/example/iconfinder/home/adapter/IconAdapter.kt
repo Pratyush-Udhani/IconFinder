@@ -1,18 +1,19 @@
 package com.example.iconfinder.home.adapter
 
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import coil.api.load
 import com.example.iconfinder.R
 import com.example.iconfinder.base.BaseRecyclerViewAdapter
-import com.example.iconfinder.pojo.Emoji
+import com.example.iconfinder.pojo.Icon
 import com.example.iconfinder.utils.makeGone
 import com.example.iconfinder.utils.makeVisible
+import kotlinx.android.synthetic.main.card_emoji.view.*
 
 class IconAdapter(
-    private val list: MutableList<Emoji>,
+    private var list: MutableList<Icon>,
     private val listener: Onclick
 ) : BaseRecyclerViewAdapter() {
 
@@ -29,34 +30,53 @@ class IconAdapter(
     override fun getItemCount(): Int {
         return list.size
     }
-    
+
+
+    fun submitList(list: MutableList<Icon>) {
+        this.list = list
+        notifyDataSetChanged()
+    }
+
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        
-        private val iconName: TextView = itemView.findViewById(R.id.iconName)
-        private val paidTag: ImageView = itemView.findViewById(R.id.paidLogo)
-        private val iconImage: ImageView = itemView.findViewById(R.id.logoImage)
-        private val downloadButton: ImageView = itemView.findViewById(R.id.downloadButton)
-        private val priceText: TextView = itemView.findViewById(R.id.priceText)
-        
-        fun bindItems(item: Emoji) {
-            iconName.text = item.emojiName
-            
-            if (item.paid){
-                paidTag.makeVisible()
-                downloadButton.makeGone()
-                priceText.makeVisible()
-                priceText.text = item.price
-            } else {
-                paidTag.makeGone()
-                downloadButton.makeVisible()
-                priceText.makeGone()
+
+        fun bindItems(item: Icon) {
+
+            with(itemView) {
+                if (item.rasterSizes.size > 6)
+                    logoImage.load(item.rasterSizes[6].formats[0].previewUrl) {
+                        crossfade(true)
+                        placeholder(R.drawable.ic_loading)
+                    }
+                else
+                    logoImage.load(item.rasterSizes[0].formats[0].previewUrl) {
+                        crossfade(true)
+                        placeholder(R.drawable.ic_loading)
+                    }
+
+                if (item.isPremium) {
+                    paidLogo.makeVisible()
+                    downloadButton.makeGone()
+                    priceText.makeVisible()
+
+                    if (item.prices.isNotEmpty())
+                        priceText.text = "${item.prices[0].currency} ${item.prices[0].price}"
+
+                } else {
+                    paidLogo.makeGone()
+                    downloadButton.makeVisible()
+                    priceText.makeGone()
+
+                    downloadButton.setOnClickListener {
+                        listener.onIconClicked(item)
+                    }
+                }
             }
         }
         
     }
 
     interface Onclick {
-        fun onIconClicked(emoji: Emoji)
+        fun onIconClicked(icon: Icon)
     }
 
 }
