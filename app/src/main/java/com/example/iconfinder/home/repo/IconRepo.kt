@@ -1,5 +1,6 @@
 package com.example.iconfinder.home.repo
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.iconfinder.BuildConfig
 import com.example.iconfinder.api.ApiClient
@@ -21,6 +22,7 @@ class IconRepo @Inject constructor(private val apiClient: ApiClient) {
         }, {
             networkResult = it
         }, {
+            Log.d("TAG!!!!", it.toString())
             networkResult = it
         })
 

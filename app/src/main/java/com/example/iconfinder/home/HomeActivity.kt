@@ -122,6 +122,8 @@ class HomeActivity : BaseActivity(), IconAdapter.Onclick {
                 if (query == null) return false
 
                 removeAndReload()
+                testText.makeGone()
+                emojiRecycler.makeVisible()
                 this@HomeActivity.query = query
                 iconViewModel.getIcons(query, NUMBER_OF_ICONS, 0)
                 return true

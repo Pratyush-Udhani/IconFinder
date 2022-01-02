@@ -44,7 +44,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-            buildConfigField("String", "BASE_URL", "\"https://api.iconfinder.com/v3/\"")
+            buildConfigField("String", "BASE_URL", "\"https://api.iconfinder.com/v4/\"")
             buildConfigField("String", "CLIENT_ID", client_id.toString())
             buildConfigField("String", "CLIENT_SECRET", client_secret.toString())
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

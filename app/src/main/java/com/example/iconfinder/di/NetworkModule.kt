@@ -56,11 +56,15 @@ class NetworkModule {
     @Singleton
     fun getInterceptor(): Interceptor {
         return Interceptor {
-            val request = it.request().newBuilder()
-            val actualRequest = request.build()
-            it.proceed(actualRequest)
+            it.run {
+                proceed(
+                    request()
+                        .newBuilder()
+                        .addHeader("Authorization", "Bearer ${BuildConfig.CLIENT_SECRET}")
+                        .build()
+                )
+            }
         }
-
     }
 
     @Provides
