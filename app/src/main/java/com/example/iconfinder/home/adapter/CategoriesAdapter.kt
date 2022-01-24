@@ -9,7 +9,7 @@ import com.example.iconfinder.pojo.Category
 import kotlinx.android.synthetic.main.card_category.view.*
 
 class CategoriesAdapter(
-    private val list: List<Category>,
+    private var list: List<Category>,
     private val listener: Onclick
 ): BaseRecyclerViewAdapter() {
 
@@ -26,6 +26,11 @@ class CategoriesAdapter(
 
     override fun getItemCount(): Int {
         return list.size
+    }
+
+    fun submitList(list: MutableList<Category>) {
+        this.list = list
+        notifyDataSetChanged()
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

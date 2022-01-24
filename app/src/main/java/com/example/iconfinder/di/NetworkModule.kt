@@ -42,7 +42,6 @@ class NetworkModule {
     ): OkHttpClient {
         val httpBuilder = OkHttpClient.Builder()
             .addInterceptor(interceptor)
-            .addNetworkInterceptor(interceptor)
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(50, TimeUnit.SECONDS)
@@ -56,14 +55,22 @@ class NetworkModule {
     @Singleton
     fun getInterceptor(): Interceptor {
         return Interceptor {
-            it.run {
-                proceed(
-                    request()
-                        .newBuilder()
-                        .addHeader("Authorization", "Bearer ${BuildConfig.CLIENT_SECRET}")
-                        .build()
-                )
-            }
+            val request = it
+                .request()
+                .newBuilder()
+                .addHeader("Accept", "application/json")
+                .addHeader("Authorization", "Bearer ${BuildConfig.CLIENT_SECRET}")
+            val actualRequest = request.build()
+            it.proceed(actualRequest)
+//            it.run {
+//                proceed(
+//                    request()
+//                        .newBuilder()
+//                        .addHeader("Authorization", "Bearer ${BuildConfig.CLIENT_SECRET}")
+//                        .addHeader("Accept", "application/json")
+//                        .build()
+//                )
+//            }
         }
     }
 

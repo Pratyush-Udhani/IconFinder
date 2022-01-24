@@ -1,6 +1,7 @@
 package com.example.iconfinder.home
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -52,6 +53,7 @@ class IconsFragment : BaseFragment(), IconAdapter.Onclick {
     }
 
     private fun addOnScrollListener() {
+        Log.d("TAG!!!!", "called on")
         emojiRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)

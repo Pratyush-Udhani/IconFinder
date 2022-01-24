@@ -29,13 +29,26 @@ class IconRepo @Inject constructor(private val apiClient: ApiClient) {
         return networkResult!!
     }
 
+    suspend fun getCategories(count: Int): NetworkResult<ApiResponse> {
+        var networkResult: NetworkResult<ApiResponse>? = null
+
+        safeApiCall({
+            apiClient.getCategories(mapOf(COUNT to count.toString()))
+        }, {
+            networkResult = it
+        }, {
+            networkResult = it
+        })
+
+        return networkResult!!
+    }
+
     private fun params(query: String, count: Int, index: Int): Map<String, String> =
         mapOf(
             QUERY to query,
             COUNT to count.toString(),
             START_INDEX to index.toString(),
-            CLIENT_ID to BuildConfig.CLIENT_ID,
-            CLIENT_SECRET to BuildConfig.CLIENT_SECRET
+            CLIENT_ID to BuildConfig.CLIENT_ID
         )
 
 }

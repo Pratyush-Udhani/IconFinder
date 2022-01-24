@@ -1,5 +1,6 @@
 package com.example.iconfinder.utils
 
+import android.util.Log
 import org.json.JSONObject
 import retrofit2.HttpException
 import java.net.UnknownHostException
@@ -17,6 +18,7 @@ suspend fun <T> safeApiCall(
             when (it) {
                 is HttpException -> {
                     it.printStackTrace()
+                    Log.d("TAG!!!!", it.response()?.errorBody()?.string().toString())
                     val json = JSONObject(it.response()?.errorBody()?.string())
                     onFailure.invoke(NetworkResult.Error(json.toString()))
                 }

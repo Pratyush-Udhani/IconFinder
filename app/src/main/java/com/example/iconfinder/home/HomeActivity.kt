@@ -55,6 +55,7 @@ class HomeActivity : BaseActivity(), IconAdapter.Onclick {
     private fun init() {
         showLoading(false)
         setUpRecycler()
+        setUpFragment()
 
         iconViewModel.iconsLiveData.observe(this) { list ->
             listItems.addAll(list)
@@ -62,9 +63,27 @@ class HomeActivity : BaseActivity(), IconAdapter.Onclick {
             iconAdapter.submitList(listItems)
 
             showLoading(false)
-            if (list.isEmpty()) Toast.makeText(this, "No more results found!", Toast.LENGTH_SHORT).show()
+            if (list.isEmpty()) {
+                Toast.makeText(this, "No more results found!", Toast.LENGTH_SHORT).show()
+                emojiRecycler.makeGone()
+                homeContainer.makeVisible()
+                replaceFragment()
+            }
             Log.d("Main", listItems.size.toString())
         }
+    }
+
+    private fun replaceFragment() {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.homeContainer, CategoriesFragment.newInstance())
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
+
+    private fun setUpFragment() {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.add(R.id.homeContainer, CategoriesFragment.newInstance())
+        transaction.commit()
     }
 
     private fun loadData(query: String, count: Int, index: Int) {
@@ -108,7 +127,7 @@ class HomeActivity : BaseActivity(), IconAdapter.Onclick {
             override fun onMenuItemActionExpand(p0: MenuItem?): Boolean = true
 
             override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-                if (query != defaultQuery) { // Something has been searched by the user
+                if (query != defaultQuery) {
                     removeAndReload()
                     iconViewModel.getIcons(defaultQuery, NUMBER_OF_ICONS, 0)
                 }
@@ -122,7 +141,7 @@ class HomeActivity : BaseActivity(), IconAdapter.Onclick {
                 if (query == null) return false
 
                 removeAndReload()
-                testText.makeGone()
+                homeContainer.makeGone()
                 emojiRecycler.makeVisible()
                 this@HomeActivity.query = query
                 iconViewModel.getIcons(query, NUMBER_OF_ICONS, 0)
@@ -156,6 +175,10 @@ class HomeActivity : BaseActivity(), IconAdapter.Onclick {
             adapter = this@HomeActivity.iconAdapter
             layoutManager = GridLayoutManager(this@HomeActivity, 2, GridLayoutManager.VERTICAL, false)
         }
+    }
+
+    private fun categoryCalled() {
+
     }
 
     private fun showLoading(boolean: Boolean) {
