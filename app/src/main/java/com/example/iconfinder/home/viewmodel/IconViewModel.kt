@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.iconfinder.home.repo.IconRepo
 import com.example.iconfinder.pojo.Category
 import com.example.iconfinder.pojo.Icon
+import com.example.iconfinder.pojo.IconSet
 import com.example.iconfinder.utils.NetworkResult
 import com.example.iconfinder.utils.isLoading
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,6 +22,7 @@ class IconViewModel @Inject constructor(private val iconRepo: IconRepo): ViewMod
     private var recentIndex = 0
     private var latestData = listOf<Icon>()
     private var latestCatData = listOf<Category>()
+    private var latestSetData = listOf<IconSet>()
 
     private val _iconsLiveData = MutableLiveData<List<Icon>>()
     val iconsLiveData: LiveData<List<Icon>>
@@ -71,6 +73,13 @@ class IconViewModel @Inject constructor(private val iconRepo: IconRepo): ViewMod
                     isLoading = false
                 }
             }
+        }
+    }
+
+    fun getIconSet(query: String, count: Int) {
+        isLoading = true
+        viewModelScope.launch {
+
         }
     }
 

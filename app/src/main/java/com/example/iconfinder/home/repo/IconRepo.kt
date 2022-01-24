@@ -43,6 +43,16 @@ class IconRepo @Inject constructor(private val apiClient: ApiClient) {
         return networkResult!!
     }
 
+    suspend fun getIconSet(query: String, count: Int): NetworkResult<ApiResponse> {
+        var networkResult: NetworkResult<ApiResponse>? = null
+
+        safeApiCall({
+            apiClient
+        })
+
+        return networkResult!!
+    }
+
     private fun params(query: String, count: Int, index: Int): Map<String, String> =
         mapOf(
             QUERY to query,

@@ -100,12 +100,19 @@ class CategoriesFragment : BaseFragment(), CategoriesAdapter.Onclick {
         })
     }
 
+    private fun changeFragment(fragment: BaseFragment) {
+        val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+        fragmentTransaction?.replace(R.id.homeContainer, fragment)
+        fragmentTransaction?.commit()
+        fragmentTransaction?.addToBackStack(null)
+    }
+
     companion object {
         fun newInstance() = CategoriesFragment()
         private val listCategories = mutableListOf<Category>()
     }
 
     override fun onCategoryClicked(category: Category) {
-
+        changeFragment(IconSetFragment.newInstance(category.name))
     }
 }

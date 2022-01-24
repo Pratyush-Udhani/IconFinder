@@ -19,6 +19,8 @@ interface ApiClient {
     @GET(CATEGORIES_URL)
     suspend fun getCategories(@QueryMap params: Map<String, String>) : ApiResponse
 
+
+
     @GET
     @Streaming
     fun downloadFile(@Url url: String): Call<ResponseBody>
