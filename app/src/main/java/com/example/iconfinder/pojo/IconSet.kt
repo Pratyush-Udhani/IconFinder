@@ -7,7 +7,7 @@ class IconSet (
     @SerializedName("iconset_id")
     val iconSetId: String,
 
-    @SerializedName("name")
+    @SerializedName("identifier")
     val name: String
 
 )

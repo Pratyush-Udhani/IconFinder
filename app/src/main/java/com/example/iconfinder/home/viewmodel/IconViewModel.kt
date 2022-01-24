@@ -1,5 +1,6 @@
 package com.example.iconfinder.home.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -31,6 +32,10 @@ class IconViewModel @Inject constructor(private val iconRepo: IconRepo): ViewMod
     private val _categoryLiveData = MutableLiveData<List<Category>>()
     val categoryLiveData: LiveData<List<Category>>
         get() = _categoryLiveData
+
+    private val _iconSetLiveData = MutableLiveData<List<IconSet>>()
+    val iconSetLiveData: LiveData<List<IconSet>>
+        get() = _iconSetLiveData
 
     fun getIcons(query: String, count: Int, index: Int) {
         if (query == recentQuery && recentCount == count && recentIndex == index) {
@@ -80,6 +85,19 @@ class IconViewModel @Inject constructor(private val iconRepo: IconRepo): ViewMod
         isLoading = true
         viewModelScope.launch {
 
+            when(val response = iconRepo.getIconSet(query, count)) {
+                is NetworkResult.Success -> {
+                    isLoading = false
+                    val data = response.data
+                    latestSetData = data.iconSet
+                    _iconSetLiveData.postValue(data.iconSet)
+                    Log.d("TAG!!!!", "passed")
+                }
+                is NetworkResult.Error -> {
+                    Log.d("TAG!!!!", "failed")
+                    isLoading = false
+                }
+            }
         }
     }
 

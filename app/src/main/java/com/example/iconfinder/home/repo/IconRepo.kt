@@ -22,7 +22,6 @@ class IconRepo @Inject constructor(private val apiClient: ApiClient) {
         }, {
             networkResult = it
         }, {
-            Log.d("TAG!!!!", it.toString())
             networkResult = it
         })
 
@@ -47,7 +46,11 @@ class IconRepo @Inject constructor(private val apiClient: ApiClient) {
         var networkResult: NetworkResult<ApiResponse>? = null
 
         safeApiCall({
-            apiClient
+            apiClient.getIconSet(query, mapOf(COUNT to count.toString()))
+        }, {
+            networkResult = it
+        }, {
+            networkResult = it
         })
 
         return networkResult!!

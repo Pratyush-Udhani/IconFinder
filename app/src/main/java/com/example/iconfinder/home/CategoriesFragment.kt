@@ -13,6 +13,7 @@ import com.example.iconfinder.base.BaseFragment
 import com.example.iconfinder.home.adapter.CategoriesAdapter
 import com.example.iconfinder.home.viewmodel.IconViewModel
 import com.example.iconfinder.pojo.Category
+import com.example.iconfinder.utils.NUMBER_OF_CATEGORIES
 import com.example.iconfinder.utils.START_INDEX
 import com.example.iconfinder.utils.isLoading
 import kotlinx.android.synthetic.main.fragment_categories.*
@@ -50,7 +51,7 @@ class CategoriesFragment : BaseFragment(), CategoriesAdapter.Onclick {
     }
 
     private fun init() {
-        iconViewModel.getCategories(20)
+        iconViewModel.getCategories(NUMBER_OF_CATEGORIES)
         setUpRecycler()
         setUpObserver()
     }
@@ -58,7 +59,6 @@ class CategoriesFragment : BaseFragment(), CategoriesAdapter.Onclick {
     private fun setUpObserver() {
         iconViewModel.categoryLiveData.observe(viewLifecycleOwner) { list ->
             listCategories.addAll(list)
-            Log.d("TAG!!!!", "category: ${list.size}")
             removeDuplicateValues(listCategories)
             categoryAdapter.submitList(listCategories)
         }
@@ -113,6 +113,6 @@ class CategoriesFragment : BaseFragment(), CategoriesAdapter.Onclick {
     }
 
     override fun onCategoryClicked(category: Category) {
-        changeFragment(IconSetFragment.newInstance(category.name))
+        changeFragment(IconSetFragment.newInstance(category.identifier))
     }
 }
