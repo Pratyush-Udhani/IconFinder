@@ -2,13 +2,12 @@ package com.example.iconfinder.api
 
 import com.example.iconfinder.pojo.ApiResponse
 import com.example.iconfinder.utils.CATEGORIES_URL
+import com.example.iconfinder.utils.ICONS_IN_ICON_SET
 import com.example.iconfinder.utils.ICONS_URL
+import com.example.iconfinder.utils.ICON_SET_URL
 import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.QueryMap
-import retrofit2.http.Streaming
-import retrofit2.http.Url
+import retrofit2.http.*
 
 @JvmSuppressWildcards
 interface ApiClient {
@@ -18,6 +17,12 @@ interface ApiClient {
 
     @GET(CATEGORIES_URL)
     suspend fun getCategories(@QueryMap params: Map<String, String>) : ApiResponse
+
+    @GET(ICON_SET_URL)
+    suspend fun getIconSet(@Path("category") category: String, @QueryMap params: Map<String, String>) : ApiResponse
+
+    @GET(ICONS_IN_ICON_SET)
+    suspend fun getIconInIconSet(@Path("iconset") iconSet: String, @QueryMap params: Map<String, String>) : ApiResponse
 
     @GET
     @Streaming

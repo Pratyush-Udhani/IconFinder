@@ -2,12 +2,12 @@ package com.example.iconfinder.pojo
 
 import com.google.gson.annotations.SerializedName
 
-class Category (
+class IconSet (
 
-    @SerializedName("name")
-    val name: String,
+    @SerializedName("iconset_id")
+    val iconSetId: String,
 
     @SerializedName("identifier")
-    val identifier: String
+    val name: String
 
 )

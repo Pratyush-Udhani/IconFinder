@@ -1,15 +1,9 @@
 package com.example.iconfinder.home.repo
 
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import com.example.iconfinder.BuildConfig
 import com.example.iconfinder.api.ApiClient
 import com.example.iconfinder.pojo.ApiResponse
-import com.example.iconfinder.pojo.Icon
 import com.example.iconfinder.utils.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import retrofit2.Response
 import javax.inject.Inject
 
 class IconRepo @Inject constructor(private val apiClient: ApiClient) {
@@ -22,7 +16,6 @@ class IconRepo @Inject constructor(private val apiClient: ApiClient) {
         }, {
             networkResult = it
         }, {
-            Log.d("TAG!!!!", it.toString())
             networkResult = it
         })
 
@@ -34,6 +27,34 @@ class IconRepo @Inject constructor(private val apiClient: ApiClient) {
 
         safeApiCall({
             apiClient.getCategories(mapOf(COUNT to count.toString()))
+        }, {
+            networkResult = it
+        }, {
+            networkResult = it
+        })
+
+        return networkResult!!
+    }
+
+    suspend fun getIconSet(query: String, count: Int): NetworkResult<ApiResponse> {
+        var networkResult: NetworkResult<ApiResponse>? = null
+
+        safeApiCall({
+            apiClient.getIconSet(query, mapOf(COUNT to count.toString()))
+        }, {
+            networkResult = it
+        }, {
+            networkResult = it
+        })
+
+        return networkResult!!
+    }
+
+    suspend fun getIconsInIconSet(iconset: String, count: Int) : NetworkResult<ApiResponse> {
+        var networkResult: NetworkResult<ApiResponse>? = null
+
+        safeApiCall({
+            apiClient.getIconInIconSet(iconset, mapOf(COUNT to count.toString()))
         }, {
             networkResult = it
         }, {

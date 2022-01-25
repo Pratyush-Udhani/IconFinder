@@ -1,7 +1,6 @@
 package com.example.iconfinder.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +12,7 @@ import com.example.iconfinder.base.BaseFragment
 import com.example.iconfinder.home.adapter.CategoriesAdapter
 import com.example.iconfinder.home.viewmodel.IconViewModel
 import com.example.iconfinder.pojo.Category
+import com.example.iconfinder.utils.NUMBER_OF_CATEGORIES
 import com.example.iconfinder.utils.START_INDEX
 import com.example.iconfinder.utils.isLoading
 import kotlinx.android.synthetic.main.fragment_categories.*
@@ -50,7 +50,7 @@ class CategoriesFragment : BaseFragment(), CategoriesAdapter.Onclick {
     }
 
     private fun init() {
-        iconViewModel.getCategories(20)
+        iconViewModel.getCategories(NUMBER_OF_CATEGORIES)
         setUpRecycler()
         setUpObserver()
     }
@@ -58,7 +58,6 @@ class CategoriesFragment : BaseFragment(), CategoriesAdapter.Onclick {
     private fun setUpObserver() {
         iconViewModel.categoryLiveData.observe(viewLifecycleOwner) { list ->
             listCategories.addAll(list)
-            Log.d("TAG!!!!", "category: ${list.size}")
             removeDuplicateValues(listCategories)
             categoryAdapter.submitList(listCategories)
         }
@@ -84,7 +83,6 @@ class CategoriesFragment : BaseFragment(), CategoriesAdapter.Onclick {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
-                Log.d("TAG!!!!", "called on scroll")
                 val count = layoutManager.itemCount
 
                 if (dy > 0 && !isLoading) {
@@ -100,12 +98,26 @@ class CategoriesFragment : BaseFragment(), CategoriesAdapter.Onclick {
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+        listCategories.clear()
+        categoryAdapter.submitList(listCategories)
+        init()
+    }
+
+    private fun changeFragment(fragment: BaseFragment) {
+        val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+        fragmentTransaction?.replace(R.id.homeContainer, fragment)
+        fragmentTransaction?.commit()
+        fragmentTransaction?.addToBackStack(null)
+    }
+
     companion object {
         fun newInstance() = CategoriesFragment()
         private val listCategories = mutableListOf<Category>()
     }
 
     override fun onCategoryClicked(category: Category) {
-
+        changeFragment(IconSetFragment.newInstance(category.identifier))
     }
 }

@@ -16,8 +16,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
-
-
 @Module
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
@@ -62,15 +60,6 @@ class NetworkModule {
                 .addHeader("Authorization", "Bearer ${BuildConfig.CLIENT_SECRET}")
             val actualRequest = request.build()
             it.proceed(actualRequest)
-//            it.run {
-//                proceed(
-//                    request()
-//                        .newBuilder()
-//                        .addHeader("Authorization", "Bearer ${BuildConfig.CLIENT_SECRET}")
-//                        .addHeader("Accept", "application/json")
-//                        .build()
-//                )
-//            }
         }
     }
 
