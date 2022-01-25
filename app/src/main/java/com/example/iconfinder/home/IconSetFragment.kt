@@ -1,7 +1,6 @@
 package com.example.iconfinder.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -67,12 +66,10 @@ class IconSetFragment : BaseFragment(), IconSetAdapter.OnClick {
     private fun setUpObserver() {
         iconViewModel.iconSetLiveData.observe(viewLifecycleOwner) { list ->
             if (list != null) {
-                Log.d("TAG!!!!", "non empty list")
                 listIconSet.addAll(list)
                 removeDuplicateValues(listIconSet)
                 iconSetAdapter.submitList(listIconSet)
             } else {
-                Log.d("TAG!!!!", "empty list")
             }
         }
     }
@@ -125,7 +122,6 @@ class IconSetFragment : BaseFragment(), IconSetAdapter.OnClick {
     }
 
     override fun onIconSetClicked(iconSet: IconSet) {
-        Log.d("TAG!!!!", "clicked")
         (activity as HomeActivity).fetchIconsInSet(iconSet.iconSetId)
     }
 

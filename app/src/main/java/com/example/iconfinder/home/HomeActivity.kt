@@ -3,7 +3,6 @@ package com.example.iconfinder.home
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -65,7 +64,6 @@ class HomeActivity : BaseActivity(), IconAdapter.Onclick {
             listItems.addAll(list)
             removeDuplicateValues(listItems)
             iconAdapter.submitList(listItems)
-            Log.d("TAG!!!!", "called icon data")
 
             showLoading(false)
             if (list.isEmpty()) {

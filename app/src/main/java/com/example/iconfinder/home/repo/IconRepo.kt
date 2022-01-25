@@ -1,15 +1,9 @@
 package com.example.iconfinder.home.repo
 
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import com.example.iconfinder.BuildConfig
 import com.example.iconfinder.api.ApiClient
 import com.example.iconfinder.pojo.ApiResponse
-import com.example.iconfinder.pojo.Icon
 import com.example.iconfinder.utils.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import retrofit2.Response
 import javax.inject.Inject
 
 class IconRepo @Inject constructor(private val apiClient: ApiClient) {

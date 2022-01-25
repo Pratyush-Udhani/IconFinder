@@ -11,7 +11,6 @@ import com.example.iconfinder.pojo.Icon
 import com.example.iconfinder.pojo.IconSet
 import com.example.iconfinder.utils.NetworkResult
 import com.example.iconfinder.utils.isLoading
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
