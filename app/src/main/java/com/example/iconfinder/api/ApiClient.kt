@@ -2,6 +2,7 @@ package com.example.iconfinder.api
 
 import com.example.iconfinder.pojo.ApiResponse
 import com.example.iconfinder.utils.CATEGORIES_URL
+import com.example.iconfinder.utils.ICONS_IN_ICON_SET
 import com.example.iconfinder.utils.ICONS_URL
 import com.example.iconfinder.utils.ICON_SET_URL
 import okhttp3.ResponseBody
@@ -19,6 +20,9 @@ interface ApiClient {
 
     @GET(ICON_SET_URL)
     suspend fun getIconSet(@Path("category") category: String, @QueryMap params: Map<String, String>) : ApiResponse
+
+    @GET(ICONS_IN_ICON_SET)
+    suspend fun getIconInIconSet(@Path("iconset") iconSet: String, @QueryMap params: Map<String, String>) : ApiResponse
 
     @GET
     @Streaming

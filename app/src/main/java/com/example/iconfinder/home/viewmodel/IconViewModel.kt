@@ -91,10 +91,25 @@ class IconViewModel @Inject constructor(private val iconRepo: IconRepo): ViewMod
                     val data = response.data
                     latestSetData = data.iconSet
                     _iconSetLiveData.postValue(data.iconSet)
-                    Log.d("TAG!!!!", "passed")
                 }
                 is NetworkResult.Error -> {
-                    Log.d("TAG!!!!", "failed")
+                    isLoading = false
+                }
+            }
+        }
+    }
+
+    fun getIconsInIconSet(iconset: String, count: Int) {
+        isLoading = true
+        Log.d("TAG!!!!", "called vm")
+        viewModelScope.launch {
+
+            when(val response = iconRepo.getIconsInIconSet(iconset, count)) {
+                is NetworkResult.Success -> {
+                    val data = response.data
+                    _iconsLiveData.postValue(data.icons)
+                }
+                is NetworkResult.Error -> {
                     isLoading = false
                 }
             }

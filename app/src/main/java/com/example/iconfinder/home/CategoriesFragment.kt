@@ -84,7 +84,6 @@ class CategoriesFragment : BaseFragment(), CategoriesAdapter.Onclick {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
-                Log.d("TAG!!!!", "called on scroll")
                 val count = layoutManager.itemCount
 
                 if (dy > 0 && !isLoading) {
@@ -98,6 +97,13 @@ class CategoriesFragment : BaseFragment(), CategoriesAdapter.Onclick {
                 }
             }
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        listCategories.clear()
+        categoryAdapter.submitList(listCategories)
+        init()
     }
 
     private fun changeFragment(fragment: BaseFragment) {

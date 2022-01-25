@@ -37,6 +37,7 @@ class IconSetFragment : BaseFragment(), IconSetAdapter.OnClick {
         if (savedInstanceState != null) {
             startIndex = savedInstanceState.getInt(START_INDEX, 0)
         }
+
     }
 
     override fun onCreateView(
@@ -52,9 +53,15 @@ class IconSetFragment : BaseFragment(), IconSetAdapter.OnClick {
     }
 
     private fun init() {
+        clearList()
         setUpRecycler()
         setUpObserver()
         iconViewModel.getIconSet(category!!, NUMBER_OF_ICON_SETS)
+    }
+
+    private fun clearList() {
+        listIconSet.clear()
+        iconSetAdapter.submitList(listIconSet)
     }
 
     private fun setUpObserver() {
@@ -118,6 +125,16 @@ class IconSetFragment : BaseFragment(), IconSetAdapter.OnClick {
     }
 
     override fun onIconSetClicked(iconSet: IconSet) {
+        Log.d("TAG!!!!", "clicked")
+        (activity as HomeActivity).fetchIconsInSet(iconSet.iconSetId)
+    }
 
+    private fun clearFragments() {
+        val fm = activity?.supportFragmentManager
+        if (fm != null) {
+            for (i in 0..fm.backStackEntryCount) {
+                fm.popBackStack()
+            }
+        }
     }
 }

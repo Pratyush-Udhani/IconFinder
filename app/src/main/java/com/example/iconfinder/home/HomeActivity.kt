@@ -15,6 +15,7 @@ import com.example.iconfinder.BuildConfig
 import com.example.iconfinder.BuildConfig.BASE_URL
 import com.example.iconfinder.R
 import com.example.iconfinder.base.BaseActivity
+import com.example.iconfinder.base.BaseFragment
 import com.example.iconfinder.home.adapter.IconAdapter
 import com.example.iconfinder.home.viewmodel.IconViewModel
 import com.example.iconfinder.pojo.Icon
@@ -56,11 +57,15 @@ class HomeActivity : BaseActivity(), IconAdapter.Onclick {
         showLoading(false)
         setUpRecycler()
         setUpFragment()
+        setUpObserver()
+    }
 
+    private fun setUpObserver() {
         iconViewModel.iconsLiveData.observe(this) { list ->
             listItems.addAll(list)
             removeDuplicateValues(listItems)
             iconAdapter.submitList(listItems)
+            Log.d("TAG!!!!", "called icon data")
 
             showLoading(false)
             if (list.isEmpty()) {
@@ -69,8 +74,14 @@ class HomeActivity : BaseActivity(), IconAdapter.Onclick {
                 homeContainer.makeVisible()
                 replaceFragment()
             }
-            Log.d("Main", listItems.size.toString())
         }
+    }
+
+    fun fetchIconsInSet(iconSetId: String) {
+        homeContainer.makeGone()
+        emojiRecycler.makeVisible()
+        iconSetID = iconSetId
+        iconViewModel.getIconsInIconSet(iconSetId, NUMBER_OF_ICONS)
     }
 
     private fun replaceFragment() {
@@ -110,7 +121,6 @@ class HomeActivity : BaseActivity(), IconAdapter.Onclick {
             }
         })
     }
-
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -153,7 +163,6 @@ class HomeActivity : BaseActivity(), IconAdapter.Onclick {
         return super.onCreateOptionsMenu(menu)
     }
 
-
     private fun removeAndReload() {
         listItems.clear()
         iconAdapter.submitList(mutableListOf())
@@ -177,30 +186,47 @@ class HomeActivity : BaseActivity(), IconAdapter.Onclick {
         }
     }
 
-    private fun categoryCalled() {
-
-    }
-
     private fun showLoading(boolean: Boolean) {
         if (boolean) progressBar.makeVisible()
         else progressBar.makeGone()
     }
 
+    private fun changeFragment(fragment: BaseFragment) {
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.homeContainer, fragment)
+        fragmentTransaction.commit()
+        fragmentTransaction.addToBackStack(null)
+    }
 
+        override fun onBackPressed() {
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.homeContainer)
 
-    override fun onBackPressed() {
-        if (backPressed.plus(2000) > System.currentTimeMillis()) {
-            super.onBackPressed()
-            finishAffinity()
+        if (iconSetID.isNullOrEmpty()) {
+            if (currentFragment is IconSetFragment) {
+                changeFragment(CategoriesFragment.newInstance())
+            } else {
+                if (backPressed.plus(2000) > System.currentTimeMillis()) {
+                    super.onBackPressed()
+                    finishAffinity()
+                } else {
+                    Toast.makeText(applicationContext, "Press again to exit", Toast.LENGTH_SHORT)
+                        .show()
+                    backPressed = System.currentTimeMillis()
+                }
+            }
         } else {
-            Toast.makeText(applicationContext, "Press again to exit", Toast.LENGTH_SHORT).show()
-            backPressed = System.currentTimeMillis()
+            homeContainer.makeVisible()
+            emojiRecycler.makeGone()
+            iconSetID = null
+            listItems.clear()
+            iconAdapter.submitList(listItems)
         }
     }
 
     companion object {
         fun newInstance(context: Context) = Intent(context, HomeActivity::class.java)
         private val listItems = mutableListOf<Icon>()
+        var iconSetID : String? = null
     }
 
     private fun getDownloadUrl(baseUrl: String) =
