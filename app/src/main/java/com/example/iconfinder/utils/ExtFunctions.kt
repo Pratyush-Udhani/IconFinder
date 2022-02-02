@@ -14,6 +14,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.iconfinder.BuildConfig
 import com.example.iconfinder.BuildConfig.BASE_URL
 import com.example.iconfinder.api.ApiClient
 import okhttp3.OkHttpClient
@@ -35,6 +36,15 @@ val retrofitClient: ApiClient by lazy {
 
     val build = httpClient.connectTimeout(100, TimeUnit.SECONDS)
         .readTimeout(100, TimeUnit.SECONDS)
+        .addInterceptor {
+            val request = it
+                .request()
+                .newBuilder()
+                .addHeader("Accept", "application/json")
+                .addHeader("Authorization", "Bearer ${BuildConfig.CLIENT_SECRET}")
+            val actualRequest = request.build()
+            it.proceed(actualRequest)
+        }
         .build()
 
     val client = Retrofit.Builder()
@@ -74,7 +84,6 @@ fun Context.toast(message: String) {
 fun downloadImage(context: Context, downloadUrl: String) {
     val intent = Intent(context, DownloadService::class.java)
     intent.putExtra("url", downloadUrl)
-    Log.d("TAG!!!!", "downloadImage")
     context.startService(intent)
 }
 

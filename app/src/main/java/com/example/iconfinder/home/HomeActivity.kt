@@ -3,6 +3,7 @@ package com.example.iconfinder.home
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -18,14 +19,16 @@ import com.example.iconfinder.base.BaseFragment
 import com.example.iconfinder.home.adapter.IconAdapter
 import com.example.iconfinder.home.viewmodel.IconViewModel
 import com.example.iconfinder.pojo.Icon
+import com.example.iconfinder.pojo.RasterSize
 import com.example.iconfinder.utils.*
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_home.emojiRecycler
 import kotlinx.android.synthetic.main.activity_home.progressBar
 import kotlinx.android.synthetic.main.fragment_home.*
 import java.util.*
+import kotlin.collections.ArrayList
 
-class HomeActivity : BaseActivity(), IconAdapter.Onclick {
+class HomeActivity : BaseActivity(), IconAdapter.Onclick, RasterFragment.DialogItemClicked {
 
     private var backPressed: Long = 0
     private val iconViewModel by viewModels<IconViewModel> { viewModelFactory }
@@ -35,6 +38,7 @@ class HomeActivity : BaseActivity(), IconAdapter.Onclick {
     var query = "\"\""
     val defaultQuery = "\"\""
     private var startIndex = 0
+    private var rasterMap = mapOf<String, RasterSize>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -234,9 +238,18 @@ class HomeActivity : BaseActivity(), IconAdapter.Onclick {
         if (!isPermissionGranted(this)) {
             askForPermission(this)
         } else {
-            val filePath = icon.rasterSizes[0].formats[0].downloadUrl
-            val downloadUrl = getDownloadUrl("$BASE_URL$filePath")
-            downloadImage(this, downloadUrl)
+            rasterMap = icon.rasterSizes.map {
+                it.size to it
+            }.toMap()
+
+            val rasterSelect = RasterFragment.newInstance(rasterMap.keys.toTypedArray())
+            rasterSelect.show(supportFragmentManager, "raster")
         }
+    }
+
+    override fun rasterSelected(raster: String) {
+        val filePath = rasterMap[raster]?.formats?.get(0)?.downloadUrl
+        val downloadUrl = getDownloadUrl("$filePath")
+        downloadImage(this, downloadUrl)
     }
 }

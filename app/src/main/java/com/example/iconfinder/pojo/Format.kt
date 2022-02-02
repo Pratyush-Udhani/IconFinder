@@ -1,7 +1,10 @@
 package com.example.iconfinder.pojo
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 class Format (
     val format: String,
 
@@ -10,4 +13,5 @@ class Format (
 
     @SerializedName("preview_url")
     val previewUrl: String
-)
+
+) : Parcelable
