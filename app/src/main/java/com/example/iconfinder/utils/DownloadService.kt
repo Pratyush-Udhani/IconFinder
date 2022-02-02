@@ -109,13 +109,11 @@ class DownloadService : Service() {
     }
 
     private fun starting() {
-        Log.d("TAG!!!!", "download started")
         toast("Download Started!")
     }
 
     @Streaming
     private fun initDownload(filename: String, url: String, id: Int) {
-        Log.d("TAG!!!!", "download init")
         val handler = Handler(Looper.getMainLooper())
         handler.post { starting() }
 

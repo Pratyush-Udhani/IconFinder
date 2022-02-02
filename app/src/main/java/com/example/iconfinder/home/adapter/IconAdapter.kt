@@ -65,7 +65,7 @@ class IconAdapter(
                     downloadButton.makeVisible()
                     priceText.makeGone()
 
-                    downloadButton.setOnClickListener {
+                    emojiCard.setOnClickListener {
                         listener.onIconClicked(item)
                     }
                 }

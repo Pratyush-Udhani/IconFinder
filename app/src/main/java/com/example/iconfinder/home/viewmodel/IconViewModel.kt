@@ -100,7 +100,6 @@ class IconViewModel @Inject constructor(private val iconRepo: IconRepo): ViewMod
 
     fun getIconsInIconSet(iconset: String, count: Int) {
         isLoading = true
-        Log.d("TAG!!!!", "called vm")
         viewModelScope.launch {
 
             when(val response = iconRepo.getIconsInIconSet(iconset, count)) {

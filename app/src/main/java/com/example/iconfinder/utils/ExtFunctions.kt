@@ -74,7 +74,6 @@ fun Context.toast(message: String) {
 fun downloadImage(context: Context, downloadUrl: String) {
     val intent = Intent(context, DownloadService::class.java)
     intent.putExtra("url", downloadUrl)
-    Log.d("TAG!!!!", "downloadImage")
     context.startService(intent)
 }
 
