@@ -12,10 +12,10 @@ import com.example.iconfinder.base.BaseFragment
 import com.example.iconfinder.home.adapter.CategoriesAdapter
 import com.example.iconfinder.home.viewmodel.IconViewModel
 import com.example.iconfinder.pojo.Category
-import com.example.iconfinder.utils.NUMBER_OF_CATEGORIES
-import com.example.iconfinder.utils.START_INDEX
-import com.example.iconfinder.utils.isLoading
+import com.example.iconfinder.utils.*
+import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.fragment_categories.*
+import kotlinx.android.synthetic.main.fragment_categories.progressBar
 import java.util.*
 
 class CategoriesFragment : BaseFragment(), CategoriesAdapter.Onclick {
@@ -50,6 +50,7 @@ class CategoriesFragment : BaseFragment(), CategoriesAdapter.Onclick {
     }
 
     private fun init() {
+        showLoading(true)
         iconViewModel.getCategories(NUMBER_OF_CATEGORIES)
         setUpRecycler()
         setUpObserver()
@@ -60,6 +61,7 @@ class CategoriesFragment : BaseFragment(), CategoriesAdapter.Onclick {
             listCategories.addAll(list)
             removeDuplicateValues(listCategories)
             categoryAdapter.submitList(listCategories)
+            showLoading(false)
         }
     }
 
@@ -71,6 +73,11 @@ class CategoriesFragment : BaseFragment(), CategoriesAdapter.Onclick {
         }
         listCategories.clear()
         listCategories.addAll(map.values)
+    }
+
+    private fun showLoading(boolean: Boolean) {
+        if (boolean) progressBar.makeVisible()
+        else progressBar.makeGone()
     }
 
     private fun setUpRecycler() {

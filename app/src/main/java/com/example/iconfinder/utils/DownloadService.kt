@@ -15,6 +15,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.FileProvider
 import com.example.iconfinder.R
 import com.example.iconfinder.pojo.Download
+import okhttp3.Request
 import okhttp3.ResponseBody
 import retrofit2.http.Streaming
 import java.io.BufferedInputStream
@@ -96,13 +97,13 @@ class DownloadService : Service() {
 
             val url = intent.getStringExtra("url")
             this.url = url ?: ""
-            Log.d("Service", url ?: "")
+            Log.d("TAG!!!!", url ?: "")
 
             msg.arg1 = startId
             mServiceHandler!!.sendMessage(msg)
 
         } catch (e: java.lang.Exception) {
-            Log.d("Service", e.message ?: "Exception occured")
+            Log.d("TAG!!!!", e.message ?: "Exception occured")
         }
 
         return START_STICKY
@@ -118,10 +119,14 @@ class DownloadService : Service() {
         handler.post { starting() }
 
         val request = retrofitClient.downloadFile(url)
-
+        Log.d("TAG!!!!", url)
         try {
-            downloadFile(request.execute().body()!!, filename, id)
+            val newRequest = request.execute()
+            val body = newRequest.body()
+            Log.d("TAG!!!!", body.toString() + " " + newRequest.message() + " " + newRequest.isSuccessful)
+            downloadFile(body!!, filename, id)
         } catch (e: Exception) {
+            Log.d("TAG!!!!", "error: $e")
             Toast.makeText(applicationContext, "Error: " + e.message, Toast.LENGTH_SHORT).show()
             val error = "There's some issue with Internet Connection. Please try again"
             notificationBuilder.setContentTitle("Download Failed!")
@@ -148,6 +153,7 @@ class DownloadService : Service() {
         try {
             mediaStorageDir.mkdirs()
         } catch (e: Exception) {
+            Log.d("TAG!!!!", e.toString())
         }
 
         val outputFile = File(
@@ -245,7 +251,7 @@ class DownloadService : Service() {
             notificationManager.notify(id, notificationBuilder!!.build())
 
         } catch (ex: Exception) {
-            Log.d("Service", "${ex.message}")
+            Log.d("TAG!!!!", "${ex.message}")
         }
     }
 }

@@ -249,8 +249,7 @@ class HomeActivity : BaseActivity(), IconAdapter.Onclick, RasterFragment.DialogI
 
     override fun rasterSelected(raster: String) {
         val filePath = rasterMap[raster]?.formats?.get(0)?.downloadUrl
-        val downloadUrl = getDownloadUrl("$BASE_URL$filePath")
-        Log.d("TAG!!!!", downloadUrl.toString())
+        val downloadUrl = getDownloadUrl("$filePath")
         downloadImage(this, downloadUrl)
     }
 }
