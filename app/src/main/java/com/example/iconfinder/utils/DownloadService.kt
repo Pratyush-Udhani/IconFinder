@@ -119,14 +119,12 @@ class DownloadService : Service() {
         handler.post { starting() }
 
         val request = retrofitClient.downloadFile(url)
-        Log.d("TAG!!!!", url)
+
         try {
             val newRequest = request.execute()
             val body = newRequest.body()
-            Log.d("TAG!!!!", body.toString() + " " + newRequest.message() + " " + newRequest.isSuccessful)
             downloadFile(body!!, filename, id)
         } catch (e: Exception) {
-            Log.d("TAG!!!!", "error: $e")
             Toast.makeText(applicationContext, "Error: " + e.message, Toast.LENGTH_SHORT).show()
             val error = "There's some issue with Internet Connection. Please try again"
             notificationBuilder.setContentTitle("Download Failed!")

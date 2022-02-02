@@ -50,11 +50,11 @@ class IconRepo @Inject constructor(private val apiClient: ApiClient) {
         return networkResult!!
     }
 
-    suspend fun getIconsInIconSet(iconset: String, count: Int) : NetworkResult<ApiResponse> {
+    suspend fun getIconsInIconSet(iconset: String, count: Int, index: Int) : NetworkResult<ApiResponse> {
         var networkResult: NetworkResult<ApiResponse>? = null
 
         safeApiCall({
-            apiClient.getIconInIconSet(iconset, mapOf(COUNT to count.toString()))
+            apiClient.getIconInIconSet(iconset, mapOf(COUNT to count.toString(), START_INDEX to index.toString()))
         }, {
             networkResult = it
         }, {

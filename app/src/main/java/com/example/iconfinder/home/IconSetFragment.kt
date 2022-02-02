@@ -12,10 +12,10 @@ import com.example.iconfinder.base.BaseFragment
 import com.example.iconfinder.home.adapter.IconSetAdapter
 import com.example.iconfinder.home.viewmodel.IconViewModel
 import com.example.iconfinder.pojo.IconSet
-import com.example.iconfinder.utils.NUMBER_OF_ICON_SETS
-import com.example.iconfinder.utils.START_INDEX
-import com.example.iconfinder.utils.isLoading
+import com.example.iconfinder.utils.*
+import kotlinx.android.synthetic.main.fragment_categories.*
 import kotlinx.android.synthetic.main.fragment_icon_set.*
+import kotlinx.android.synthetic.main.fragment_icon_set.progressBar
 import java.util.*
 
 class IconSetFragment : BaseFragment(), IconSetAdapter.OnClick {
@@ -52,6 +52,7 @@ class IconSetFragment : BaseFragment(), IconSetAdapter.OnClick {
     }
 
     private fun init() {
+        showLoading(true)
         clearList()
         setUpRecycler()
         setUpObserver()
@@ -63,9 +64,15 @@ class IconSetFragment : BaseFragment(), IconSetAdapter.OnClick {
         iconSetAdapter.submitList(listIconSet)
     }
 
+    private fun showLoading(boolean: Boolean) {
+        if (boolean) progressBar.makeVisible()
+        else progressBar.makeGone()
+    }
+
     private fun setUpObserver() {
         iconViewModel.iconSetLiveData.observe(viewLifecycleOwner) { list ->
             if (list != null) {
+                showLoading(false)
                 listIconSet.addAll(list)
                 removeDuplicateValues(listIconSet)
                 iconSetAdapter.submitList(listIconSet)
@@ -123,14 +130,5 @@ class IconSetFragment : BaseFragment(), IconSetAdapter.OnClick {
 
     override fun onIconSetClicked(iconSet: IconSet) {
         (activity as HomeActivity).fetchIconsInSet(iconSet.iconSetId)
-    }
-
-    private fun clearFragments() {
-        val fm = activity?.supportFragmentManager
-        if (fm != null) {
-            for (i in 0..fm.backStackEntryCount) {
-                fm.popBackStack()
-            }
-        }
     }
 }

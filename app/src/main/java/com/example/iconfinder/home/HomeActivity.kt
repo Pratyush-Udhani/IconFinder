@@ -67,11 +67,11 @@ class HomeActivity : BaseActivity(), IconAdapter.Onclick, RasterFragment.DialogI
         iconViewModel.iconsLiveData.observe(this) { list ->
             listItems.addAll(list)
             removeDuplicateValues(listItems)
+            Log.d("TAG!!!!", "inside obs ${listItems.size}")
             iconAdapter.submitList(listItems)
-
             showLoading(false)
+
             if (list.isEmpty()) {
-                Toast.makeText(this, "No more results found!", Toast.LENGTH_SHORT).show()
                 emojiRecycler.makeGone()
                 homeContainer.makeVisible()
                 replaceFragment()
@@ -80,10 +80,13 @@ class HomeActivity : BaseActivity(), IconAdapter.Onclick, RasterFragment.DialogI
     }
 
     fun fetchIconsInSet(iconSetId: String) {
+        showLoading(true)
+        startIndex = 0
         homeContainer.makeGone()
         emojiRecycler.makeVisible()
+        iconAdapter.checkAdapter()
         iconSetID = iconSetId
-        iconViewModel.getIconsInIconSet(iconSetId, NUMBER_OF_ICONS)
+        iconViewModel.getIconsInIconSet(iconSetId, NUMBER_OF_ICONS, startIndex)
     }
 
     private fun replaceFragment() {
@@ -99,11 +102,6 @@ class HomeActivity : BaseActivity(), IconAdapter.Onclick, RasterFragment.DialogI
         transaction.commit()
     }
 
-    private fun loadData(query: String, count: Int, index: Int) {
-        showLoading(true)
-        iconViewModel.getIcons(query, count, index)
-    }
-
     private fun addOnScrollListener() {
         emojiRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -114,10 +112,13 @@ class HomeActivity : BaseActivity(), IconAdapter.Onclick, RasterFragment.DialogI
                 if (dy > 0 && !isLoading) {
                     val holderCount = layoutManager.childCount
                     val oldCount = layoutManager.findFirstVisibleItemPosition()
-
                     if (holderCount + oldCount >= count - 4 && !isLoading) {
                         startIndex += 20
-                        iconViewModel.getIcons(query, NUMBER_OF_ICONS, startIndex)
+                        if (iconSetID.isNullOrEmpty()) {
+                            iconViewModel.getIcons(query, NUMBER_OF_ICONS, startIndex)
+                        } else {
+                            iconViewModel.getIconsInIconSet(iconSetID!!, NUMBER_OF_ICONS, startIndex)
+                        }
                     }
                 }
             }
@@ -153,10 +154,11 @@ class HomeActivity : BaseActivity(), IconAdapter.Onclick, RasterFragment.DialogI
                 if (query == null) return false
 
                 removeAndReload()
-                homeContainer.makeGone()
-                emojiRecycler.makeVisible()
                 this@HomeActivity.query = query
                 iconViewModel.getIcons(query, NUMBER_OF_ICONS, 0)
+                homeContainer.makeGone()
+                emojiRecycler.makeVisible()
+                iconSetID = null
                 return true
             }
 
@@ -184,7 +186,7 @@ class HomeActivity : BaseActivity(), IconAdapter.Onclick, RasterFragment.DialogI
     private fun setUpRecycler() {
         emojiRecycler.apply {
             adapter = this@HomeActivity.iconAdapter
-            layoutManager = GridLayoutManager(this@HomeActivity, 2, GridLayoutManager.VERTICAL, false)
+            layoutManager = this@HomeActivity.layoutManager
         }
     }
 
@@ -217,11 +219,13 @@ class HomeActivity : BaseActivity(), IconAdapter.Onclick, RasterFragment.DialogI
                 }
             }
         } else {
-            homeContainer.makeVisible()
-            emojiRecycler.makeGone()
+            Log.d("TAG!!!!", "backed")
             iconSetID = null
             listItems.clear()
             iconAdapter.submitList(listItems)
+            iconViewModel.clearData()
+            homeContainer.makeVisible()
+            emojiRecycler.makeGone()
         }
     }
 

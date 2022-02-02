@@ -98,13 +98,23 @@ class IconViewModel @Inject constructor(private val iconRepo: IconRepo): ViewMod
         }
     }
 
-    fun getIconsInIconSet(iconset: String, count: Int) {
+    fun getIconsInIconSet(iconset: String, count: Int, index: Int) {
         isLoading = true
+
+        if (recentCount == count && recentIndex == index) {
+            _iconsLiveData.postValue(latestData)
+        }
+
+        recentCount = count
+        recentIndex = index
+
         viewModelScope.launch {
 
-            when(val response = iconRepo.getIconsInIconSet(iconset, count)) {
+            when(val response = iconRepo.getIconsInIconSet(iconset, count, index)) {
                 is NetworkResult.Success -> {
+                    isLoading = false
                     val data = response.data
+                    latestData = data.icons
                     _iconsLiveData.postValue(data.icons)
                 }
                 is NetworkResult.Error -> {
@@ -112,6 +122,15 @@ class IconViewModel @Inject constructor(private val iconRepo: IconRepo): ViewMod
                 }
             }
         }
+    }
+
+    fun clearData() {
+        recentQuery = "\"\""
+        recentCount = 0
+        recentIndex = 0
+        latestData = listOf()
+        latestCatData = listOf()
+        latestSetData = listOf()
     }
 
 }

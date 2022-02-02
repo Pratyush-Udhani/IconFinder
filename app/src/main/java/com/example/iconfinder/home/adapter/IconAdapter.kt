@@ -1,5 +1,6 @@
 package com.example.iconfinder.home.adapter
 
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -33,7 +34,15 @@ class IconAdapter(
 
     fun submitList(list: MutableList<Icon>) {
         this.list = list
+        Log.d("TAG!!!!", "inside adp ${this.list.size}")
         notifyDataSetChanged()
+    }
+
+    fun checkAdapter() {
+        if (list.isNotEmpty()) {
+            list.clear()
+            notifyDataSetChanged()
+        }
     }
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
